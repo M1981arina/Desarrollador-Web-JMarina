@@ -1,0 +1,78 @@
+h1 {
+    color: #2f00ff;
+    color:rgb(36, 16, 170);
+    text-align
+}
+
+li:nth-child(2) { color: green; /* Segundo elemento de una lista */ }
+
+
+button:hover { background-color: #00ff3c; /* Botón al pasar el cursor */ }
+
+h1 + p { color: rgb(202, 222, 23); /* Primer párrafo después de un título h1 */ }
+
+p::first-letter { font-size: 2em; /* Primera letra en estilo destacado */ }
+
+@media screen and (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+}
+
+/* Estilo general (para todos los tamaños) */
+body {
+font-family: Arial, sans-serif;
+margin: 10px;
+background-color: lightgray;
+}
+/* Pantallas pequeñas (teléfonos) */
+@media (max-width: 600px) {
+body {
+background-color: lightblue;
+font-size: 14px;
+}
+}
+/* Pantallas medianas (tabletas) */
+@media (min-width: 601px) and (max-width: 1024px) {
+body {
+background-color: lightgreen;
+font-size: 16px;
+}
+}
+/* Pantallas grandes (escritorios) */
+@media (min-width: 1025px) {
+body {
+background-color: lightyellow;
+font-size: 18px;
+}
+
+.container {
+display: flex; /* Activa Flexbox */
+justify-content: space-around; /* Espacio uniforme entre elementos */
+align-items: center; /* Centra verticalmente los elementos */
+height: 200px;
+background-color: rgb(225, 20, 20);
+}
+
+.item {
+background-color: #4caf50;
+color: white;
+padding: 20px;
+text-align: center;
+border-radius: 5px;
+}
+
+.grid-container {
+display: grid; /* Activa Grid Layout */
+grid-template-columns: repeat(3, 1fr); /* Tres columnas de igual ancho */
+gap: 10px; /* Espacio entre los elementos */
+background-color: lightblue;
+padding: 10px;
+}
+.grid-item {
+background-color: #2196f3;
+color: white;
+padding: 20px;
+text-align: center;
+border-radius: 5px;
+}
