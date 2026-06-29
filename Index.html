@@ -104,6 +104,31 @@
             <a href="https://www.twitter.com" target="_blank">Twitter</a>
         </section>
 
+        <section id="registro-obras">
+    <h2>Registro de Obras Municipales</h2>
+
+    <form id="formObra">
+        <label>Nombre de la obra:</label>
+        <input type="text" id="nombreObra">
+
+        <label>Descripción:</label>
+        <textarea id="descripcionObra"></textarea>
+
+        <label>Tipo de obra:</label>
+        <input type="text" id="tipoObra">
+
+        <button type="submit">Registrar Obra</button>
+    </form>
+
+    <div id="mensaje"></div>
+
+    <h3>Total de obras registradas:
+        <span id="totalObras">0</span>
+    </h3>
+
+    <div id="listaObras"></div>
+</section>
+
         <aside>
             <h3>Información Complementaria</h3>
             <p>Promociones, horarios de atención y otros datos útiles estarán disponibles aquí.</p>
@@ -114,27 +139,9 @@
         </footer>
     </main>
 
-    container = document.querySelector('.container');
-    div  = document.createElement('div');
-    div.classList.add('box');
-    container.appendChild(div);
-
-<div class="container">
-<div class="item">1</div>
-<div class="item">2</div>
-<div class="item">3</div>
-</div>
-
-<div class="grid-container">
-<div class="grid-item">A</div>
-<div class="grid-item">B</div>
-<div class="grid-item">C</div>
-<div class="grid-item">D</div>
-<div class="grid-item">E</div>
-<div class="grid-item">F</div>
-</div>
-
-    <iframe width="560" height="315" src="https://www.youtube.com/watch?v=cVoJO982cwI" frameborder="0" allowfullscreen></iframe>
-
+   
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/cVoJO982cwI" title="Video de Arenillas" allowfullscreen> </iframe>
+<script src="script11.js"></script>
 </body>
 </html>
+
