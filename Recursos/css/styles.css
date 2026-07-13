@@ -1,78 +1,131 @@
+﻿/* =========================
+   ESTILO GENERAL
+========================= */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 10px;
+    background-color: lightgray;
+}
+
+/* TÍTULOS */
 h1 {
-    color: #2f00ff;
-    color:rgb(36, 16, 170);
-    text-align
+    color: rgb(36, 16, 170);
+    text-align: center;
 }
 
-li:nth-child(2) { color: green; /* Segundo elemento de una lista */ }
-
-
-button:hover { background-color: #00ff3c; /* Botón al pasar el cursor */ }
-
-h1 + p { color: rgb(202, 222, 23); /* Primer párrafo después de un título h1 */ }
-
-p::first-letter { font-size: 2em; /* Primera letra en estilo destacado */ }
-
-@media screen and (max-width: 600px) {
-    body {
-        font-size: 14px;
-    }
+/* LISTAS */
+li:nth-child(2) {
+    color: green;
 }
 
-/* Estilo general (para todos los tamaños) */
-body {
-font-family: Arial, sans-serif;
-margin: 10px;
-background-color: lightgray;
-}
-/* Pantallas pequeñas (teléfonos) */
-@media (max-width: 600px) {
-body {
-background-color: lightblue;
-font-size: 14px;
-}
-}
-/* Pantallas medianas (tabletas) */
-@media (min-width: 601px) and (max-width: 1024px) {
-body {
-background-color: lightgreen;
-font-size: 16px;
-}
-}
-/* Pantallas grandes (escritorios) */
-@media (min-width: 1025px) {
-body {
-background-color: lightyellow;
-font-size: 18px;
+/* BOTONES */
+button:hover {
+    background-color: #00ff3c;
+    transition: 0.3s;
 }
 
-.container {
-display: flex; /* Activa Flexbox */
-justify-content: space-around; /* Espacio uniforme entre elementos */
-align-items: center; /* Centra verticalmente los elementos */
-height: 200px;
-background-color: rgb(225, 20, 20);
+/* RELACIÓN H1 + P */
+h1 + p {
+    color: rgb(202, 222, 23);
+}
+
+/* PRIMERA LETRA */
+p::first-letter {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+/* =========================
+   FLEXBOX
+========================= */
+
+.container-flex {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 200px;
+    background-color: rgb(225, 20, 20);
 }
 
 .item {
-background-color: #4caf50;
-color: white;
-padding: 20px;
-text-align: center;
-border-radius: 5px;
+    background-color: #4caf50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
 }
 
+/* =========================
+   GRID
+========================= */
+
 .grid-container {
-display: grid; /* Activa Grid Layout */
-grid-template-columns: repeat(3, 1fr); /* Tres columnas de igual ancho */
-gap: 10px; /* Espacio entre los elementos */
-background-color: lightblue;
-padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    background-color: lightblue;
+    padding: 10px;
 }
+
 .grid-item {
-background-color: #2196f3;
-color: white;
-padding: 20px;
-text-align: center;
-border-radius: 5px;
+    background-color: #2196f3;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+/* Teléfonos */
+@media (max-width: 600px) {
+    body {
+        background-color: lightblue;
+        font-size: 14px;
+    }
+
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+
+    .container-flex {
+        flex-direction: column;
+        height: auto;
+    }
+}
+
+/* Tablets */
+@media (min-width: 601px) and (max-width: 1024px) {
+    body {
+        background-color: lightgreen;
+        font-size: 16px;
+    }
+
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Escritorio */
+@media (min-width: 1025px) {
+    body {
+        background-color: lightyellow;
+        font-size: 18px;
+    }
+
+    .grid-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.card {
+    box-shadow: 0px 3px 10px gray;
+    border-radius: 10px;
+}
+
+#listaObras .card {
+    margin-bottom: 20px;
 }

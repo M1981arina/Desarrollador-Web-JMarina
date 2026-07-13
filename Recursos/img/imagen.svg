@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220" viewBox="0 0 400 220">
+  <rect width="400" height="220" fill="#dff3ff"/>
+  <rect x="30" y="40" width="340" height="140" rx="12" fill="#4CAF50"/>
+  <rect x="60" y="80" width="120" height="60" rx="8" fill="#ffffff"/>
+  <rect x="220" y="70" width="110" height="80" rx="8" fill="#ffffff"/>
+  <text x="200" y="190" text-anchor="middle" font-family="Arial" font-size="22" fill="#1f3d2a">Arenillas</text>
+</svg>
