@@ -4,128 +4,19 @@
 
 body {
     font-family: Arial, sans-serif;
-    margin: 10px;
-    background-color: lightgray;
+    margin: 0;
+    background-color: #eef2f7;
 }
 
-/* TÍTULOS */
 h1 {
     color: rgb(36, 16, 170);
     text-align: center;
 }
 
-/* LISTAS */
-li:nth-child(2) {
-    color: green;
-}
-
-/* BOTONES */
-button:hover {
-    background-color: #00ff3c;
-    transition: 0.3s;
-}
-
-/* RELACIÓN H1 + P */
-h1 + p {
-    color: rgb(202, 222, 23);
-}
-
-/* PRIMERA LETRA */
-p::first-letter {
-    font-size: 2em;
-    font-weight: bold;
-}
-
-/* =========================
-   FLEXBOX
-========================= */
-
-.container-flex {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 200px;
-    background-color: rgb(225, 20, 20);
-}
-
-.item {
-    background-color: #4caf50;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-radius: 5px;
-}
-
-/* =========================
-   GRID
-========================= */
-
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    background-color: lightblue;
-    padding: 10px;
-}
-
-.grid-item {
-    background-color: #2196f3;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-radius: 5px;
-}
-
-/* =========================
-   RESPONSIVE DESIGN
-========================= */
-
-/* Teléfonos */
-@media (max-width: 600px) {
-    body {
-        background-color: lightblue;
-        font-size: 14px;
-    }
-
-    .grid-container {
-        grid-template-columns: 1fr;
-    }
-
-    .container-flex {
-        flex-direction: column;
-        height: auto;
-    }
-}
-
-/* Tablets */
-@media (min-width: 601px) and (max-width: 1024px) {
-    body {
-        background-color: lightgreen;
-        font-size: 16px;
-    }
-
-    .grid-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Escritorio */
-@media (min-width: 1025px) {
-    body {
-        background-color: lightyellow;
-        font-size: 18px;
-    }
-
-    .grid-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-.card {
-    box-shadow: 0px 3px 10px gray;
-    border-radius: 10px;
+.contact-links a {
+    margin-right: 0.75rem;
 }
 
 #listaObras .card {
-    margin-bottom: 20px;
+    min-height: 220px;
 }

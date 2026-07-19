@@ -3,167 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARENILLAS VUELVE A BRILLAR - semana7</title>
+    <title>ARENILLAS VUELVE A BRILLAR-8</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="Recursos/css/styles.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0; /* Color de fondo claro */
-            color: #333; /* Color de texto */
+            background-color: #eef2f7;
         }
-        header {
-            background-color: #4CAF50; /* Verde */
-            color: white; /* Texto en blanco */
-            padding: 20px;
-            text-align: center;
+        .hero-section {
+            min-height: 180px;
         }
-        nav {
-            background-color: #f44336; /* Rojo */
-            color: white;
-            padding: 10px;
+        .contact-links a {
+            margin-right: 0.75rem;
         }
-        nav ul {
-            list-style-type: none; /* Sin viñetas */
-            padding: 0;
-        }
-        nav ul li {
-            display: inline; /* En línea */
-            margin-right: 20px;
-        }
-        nav a {
-            color: white; /* Enlaces en blanco */
-            text-decoration: none; /* Sin subrayado */
-        }
-        main {
-            padding: 20px;
-        }
-        section {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: white; /* Fondo blanco para las secciones */
-            border-radius: 5px; /* Bordes redondeados */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra */
-        }
-        aside {
-            background-color: #d9edf7; /* Color azul claro */
-            padding: 15px;
-            margin-top: 20px;
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #4CAF50; /* Verde */
-            color: white;
+        #listaObras .card {
+            min-height: 220px;
         }
     </style>
 </head>
 <body>
-
-    <!-- ========================= -->
-    <!-- BASE.HTML -->
-    <!-- Encabezado reutilizable -->
-    <!-- ========================= -->
-    <header class="bg-success text-white text-center p-4">
-        <h1>ARENILLAS VUELVE A BRILLAR - semana7</h1>
-        <h2 class="h4">Plataforma para administrar las diferentes obras que el alcalde realiza en Arenillas.</h2>
-        <h3 class="h5">Johanna Marina Castillo Rodriguez</h3>
+    <header class="bg-success text-white">
+        <div class="container py-4 text-center">
+            <h1 class="display-6">ARENILLAS VUELVE A BRILLAR - 8</h1>
+            <p class="lead mb-1">Plataforma para administrar las diferentes obras que el alcalde realiza en Arenillas.</p>
+            <p class="mb-0">Johanna Marina Castillo Rodriguez</p>
+        </div>
     </header>
 
-    <!-- Menú reutilizable -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger sticky-top">
         <div class="container">
             <a class="navbar-brand" href="#">Arenillas</a>
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="#quienes-somos">Quiénes Somos</a></li>
-                <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
-                <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-            </ul>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Alternar navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#quienes-somos">Quiénes Somos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#registro-obras">Registro</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <!-- Contenido dinámico -->
-    <main>
-        <section id="inicio">
-            <h2>Bienvenido a Arenillas Vuelve a Brillar</h2>
-            <p>Esta plataforma está diseñada para facilitar la administración y seguimiento de las obras realizadas en la ciudad, mejorando la transparencia y la comunicación con la comunidad.</p>
-        </section>
-
-        <section id="quienes-somos">
-            <h2>Quiénes Somos</h2>
-            <p>ARENILLAS VUELVE A BRILLAR es un proyecto impulsado por el alcalde de Arenillas, con el objetivo de mejorar la infraestructura y servicios de la ciudad. Nuestro equipo está comprometido con la transparencia y la participación ciudadana, asegurando que cada obra se realice de manera eficiente y efectiva. Con esta plataforma, buscamos mantener informados a los ciudadanos sobre el avance de las obras y fomentar la confianza en la gestión municipal.</p>
-            <img src="ruta/a/tu/imagen.jpg" alt="Descripción de la imagen">
-        </section>
-
-        <section id="servicios">
-            <h2>Servicios</h2>
-            <ul>
-                <li>Administración de Obras Públicas</li>
-                <li>Transparencia en la Gestión Municipal</li>
-                <li>Comunicación con la Ciudadanía</li>
-            </ul>
-        </section>
-
-        <section id="contacto">
-            <h2>Contacto</h2>
-            <p>Correo: arenillasbrilla@.com</p>
-            <p>Teléfono: 0969280318</p>
-            <p>Dirección: Avda Jose Moncada, Arenillas, Ecuador</p>
-            <a href="https://www.facebook.com" target="_blank">Facebook</a>
-            <a href="https://www.twitter.com" target="_blank">Twitter</a>
-        </section>
-
-        <section id="registro-obras">
-            <h2>Registro de Obras Municipales</h2>
-
-            <form id="formObra">
-                <div class="mb-3">
-                    <label class="form-label">Nombre de la obra</label>
-                    <input type="text" id="nombreObra" class="form-control">
+    <main class="container py-4">
+        <section id="inicio" class="mb-4">
+            <div class="row g-4 align-items-center hero-section">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h2 class="card-title">Bienvenido a Arenillas Vuelve a Brillar</h2>
+                            <p class="card-text">Esta plataforma está diseñada para facilitar la administración y seguimiento de las obras realizadas en la ciudad, mejorando la transparencia y la comunicación con la comunidad.</p>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Descripción</label>
-                    <textarea id="descripcionObra" class="form-control"></textarea>
+                <div class="col-lg-4">
+                    <div class="card border-success shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Resumen rápido</h5>
+                            <p class="card-text">Administra obras, reporta avances y comparte datos con los ciudadanos desde una interfaz moderna y responsiva.</p>
+                            <span class="badge bg-success">Responsiva</span>
+                            <span class="badge bg-info text-dark">Bootstrap</span>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Tipo de obra</label>
-                    <select id="tipoObra" class="form-select">
-                        <option value="">Seleccione...</option>
-                        <option value="Vial">Vial</option>
-                        <option value="Parque">Parque</option>
-                        <option value="Educación">Educación</option>
-                        <option value="Salud">Salud</option>
-                        <option value="Turismo">Turismo</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-success">Registrar Obra</button>
-            </form>
-
-            <div id="mensaje"></div>
-
-            <h4>Total:
-                <span id="totalObras">0</span>
-            </h4>
-
-            <div id="listaObras"></div>
+            </div>
         </section>
 
-        <aside>
-            <h3>Información Complementaria</h3>
-            <p>Promociones, horarios de atención y otros datos útiles estarán disponibles aquí.</p>
-        </aside>
+        <section id="quienes-somos" class="mb-4">
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="card-title">Quiénes Somos</h2>
+                            <p>ARENILLAS VUELVE A BRILLAR es un proyecto impulsado por el alcalde de Arenillas, con el objetivo de mejorar la infraestructura y servicios de la ciudad. Nuestro equipo está comprometido con la transparencia y la participación ciudadana, asegurando que cada obra se realice de manera eficiente y efectiva.</p>
+                            <p>Con esta plataforma, buscamos mantener informados a los ciudadanos sobre el avance de las obras y fomentar la confianza en la gestión municipal.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card shadow-sm">
+                        <img src="ruta/a/tu/imagen.jpg" class="card-img-top" alt="Descripción de la imagen">
+                        <div class="card-body">
+                            <p class="card-text">Imágenes y recursos locales ayudan a conectar con la comunidad y darle identidad visual al proyecto.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <!-- Pie de página reutilizable -->
-        <footer>
-            <p>Johanna Marina Castillo Rodriguez - DESARROLLO DE APLICACIONES WEB "A" - 2026</p>
-        </footer>
+        <section id="servicios" class="mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title">Servicios</h2>
+                    <div class="row row-cols-1 row-cols-md-3 g-3">
+                        <div class="col">
+                            <div class="card h-100 border-primary">
+                                <div class="card-body">
+                                    <h5 class="card-title">Obras Públicas</h5>
+                                    <p class="card-text">Administración de proyectos de infraestructura para carreteras, parques y colegios.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 border-info">
+                                <div class="card-body">
+                                    <h5 class="card-title">Transparencia</h5>
+                                    <p class="card-text">Gestión municipal clara con información accesible a todos los ciudadanos.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 border-success">
+                                <div class="card-body">
+                                    <h5 class="card-title">Comunicación</h5>
+                                    <p class="card-text">Canales de contacto directos para recibir opiniones, reportes y sugerencias.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="registro-obras" class="mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3 gap-2 flex-column flex-md-row">
+                        <div>
+                            <h2 class="card-title mb-0">Registro de Obras Municipales</h2>
+                            <p class="text-muted mb-0">Ingresa la información de cada obra para llevar el control de forma dinámica.</p>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#detalleModal">¿Necesitas ayuda?</button>
+                    </div>
+                    <form id="formObra" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="nombreObra" class="form-label">Nombre de la obra</label>
+                            <input type="text" id="nombreObra" class="form-control" placeholder="Nombre de la obra">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="tipoObra" class="form-label">Tipo de obra</label>
+                            <select id="tipoObra" class="form-select">
+                                <option value="">Seleccione...</option>
+                                <option value="Vial">Vial</option>
+                                <option value="Parque">Parque</option>
+                                <option value="Educación">Educación</option>
+                                <option value="Salud">Salud</option>
+                                <option value="Turismo">Turismo</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="descripcionObra" class="form-label">Descripción</label>
+                            <textarea id="descripcionObra" class="form-control" rows="3" placeholder="Describe brevemente la obra"></textarea>
+                        </div>
+                        <div class="col-12 d-flex flex-column flex-sm-row gap-2 align-items-center">
+                            <button type="submit" class="btn btn-success">Registrar Obra</button>
+                            <button type="reset" class="btn btn-secondary">Limpiar formulario</button>
+                            <div id="spinner" class="d-none d-flex align-items-center text-primary">
+                                <div class="spinner-border me-2" role="status"><span class="visually-hidden">Cargando...</span></div>
+                                <small>Cargando...</small>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mensaje" class="mt-3"></div>
+                    <div class="mt-4">
+                        <h4>Total: <span id="totalObras">0</span></h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title">Obras registradas</h2>
+                    <div id="listaObras" class="row row-cols-1 row-cols-md-2 g-3"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="mb-4">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="card-title">Contacto</h2>
+                            <p>Correo: <a href="mailto:arenillasbrilla@.com">arenillasbrilla@.com</a></p>
+                            <p>Teléfono: <a href="tel:0969280318">0969280318</a></p>
+                            <p>Dirección: Avda Jose Moncada, Arenillas, Ecuador</p>
+                            <div class="contact-links mt-3">
+                                <a class="btn btn-outline-primary btn-sm" href="https://www.facebook.com" target="_blank">Facebook</a>
+                                <a class="btn btn-outline-info btn-sm" href="https://www.twitter.com" target="_blank">Twitter</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="ratio ratio-16x9 shadow-sm rounded-3 overflow-hidden">
+                        <iframe src="https://www.youtube.com/embed/cVoJO982cwI" title="Video de Arenillas" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-4">
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h3 class="card-title">Información Complementaria</h3>
+                            <p>Promociones, horarios de atención y otros datos útiles estarán disponibles aquí.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card border-warning shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Aviso importante</h5>
+                            <p class="card-text">Si el formulario detecta campos vacíos, mostrará una alerta para ayudarte a completar correctamente el registro.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-   
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/cVoJO982cwI" title="Video de Arenillas" allowfullscreen></iframe>
+    <div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Detalles de obra</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <p>Registra una obra y pulsa en "Ver detalles" para revisar la información con mayor precisión.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <div class="container">
+            <p class="mb-0">Johanna Marina Castillo Rodriguez - DESARROLLO DE APLICACIONES WEB "A" - 2026</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

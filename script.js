@@ -3,14 +3,33 @@ const listaObras = document.getElementById("listaObras");
 const mensaje = document.getElementById("mensaje");
 const totalObras = document.getElementById("totalObras");
 const tipoObra = document.getElementById("tipoObra");
+const spinner = document.getElementById("spinner");
+const modalTitle = document.getElementById("modalTitle");
+const modalBody = document.getElementById("modalBody");
+const detalleModalEl = document.getElementById("detalleModal");
+const detalleModal = detalleModalEl ? new bootstrap.Modal(detalleModalEl) : null;
 
 let obras = [];
+
+function mostrarAlerta(tipo, texto) {
+    mensaje.innerHTML = `
+        <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
+            ${texto}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    `;
+}
+
+function mostrarSpinner(mostrar) {
+    if (!spinner) return;
+    spinner.classList.toggle("d-none", !mostrar);
+}
 
 function mostrarObras() {
     if (obras.length === 0) {
         listaObras.innerHTML = `
-            <div class="alert alert-warning">
-                No existen obras registradas.
+            <div class="col">
+                <div class="alert alert-warning">No existen obras registradas.</div>
             </div>
         `;
         totalObras.textContent = "0";
@@ -19,13 +38,20 @@ function mostrarObras() {
 
     listaObras.innerHTML = "";
 
-    obras.forEach(function(obra, i) {
+    obras.forEach(function (obra, i) {
         listaObras.innerHTML += `
-            <div class="card p-3">
-                <h4>${obra.nombre}</h4>
-                <p>${obra.descripcion}</p>
-                <span class="badge bg-info text-dark">${obra.tipo}</span>
-                <button type="button" class="btn btn-danger btn-sm mt-3" onclick="eliminarObra(${i})">Eliminar</button>
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">${obra.nombre}</h5>
+                        <p class="card-text">${obra.descripcion}</p>
+                        <span class="badge bg-info text-dark">${obra.tipo}</span>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between gap-2">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="abrirModalDetalle(${i})">Ver detalles</button>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminarObra(${i})">Eliminar</button>
+                    </div>
+                </div>
             </div>
         `;
     });
@@ -33,13 +59,32 @@ function mostrarObras() {
     totalObras.textContent = obras.length;
 }
 
+function abrirModalDetalle(i) {
+    const obra = obras[i];
+    if (!obra || !detalleModal) return;
+
+    modalTitle.textContent = `Detalle de: ${obra.nombre}`;
+    modalBody.innerHTML = `
+        <p><strong>Tipo:</strong> ${obra.tipo}</p>
+        <p><strong>Descripción:</strong></p>
+        <p>${obra.descripcion}</p>
+        <p class="small text-muted">Registro dinámico generado desde la semana 7.</p>
+    `;
+    detalleModal.show();
+}
+
 function eliminarObra(i) {
-    obras.splice(i, 1);
-    mostrarObras();
+    mostrarSpinner(true);
+    setTimeout(() => {
+        obras.splice(i, 1);
+        mostrarObras();
+        mostrarSpinner(false);
+        mostrarAlerta("warning", "Obra eliminada correctamente.");
+    }, 500);
 }
 
 if (formulario) {
-    formulario.addEventListener("submit", function(event) {
+    formulario.addEventListener("submit", function (event) {
         event.preventDefault();
 
         const nombre = document.getElementById("nombreObra").value.trim();
@@ -47,28 +92,31 @@ if (formulario) {
         const tipo = tipoObra ? tipoObra.value.trim() : "";
 
         if (nombre === "" || descripcion === "" || tipo === "") {
-            mensaje.innerHTML = "<p style='color:red;'>Todos los campos son obligatorios.</p>";
+            mostrarAlerta("danger", "Todos los campos son obligatorios.");
             return;
         }
 
-        mensaje.innerHTML = "<p style='color:green;'>Obra registrada correctamente.</p>";
+        mostrarSpinner(true);
+        setTimeout(() => {
+            mostrarSpinner(false);
+            const nuevaObra = {
+                nombre: nombre,
+                descripcion: descripcion,
+                tipo: tipo,
+            };
 
-        const nuevaObra = {
-            nombre: nombre,
-            descripcion: descripcion,
-            tipo: tipo
-        };
-
-        obras.push(nuevaObra);
-        mostrarObras();
-        formulario.reset();
+            obras.push(nuevaObra);
+            mostrarObras();
+            formulario.reset();
+            mostrarAlerta("success", "Obra registrada correctamente.");
+        }, 700);
     });
 }
 
 if (tipoObra) {
-    tipoObra.addEventListener("change", function() {
+    tipoObra.addEventListener("change", function () {
         if (tipoObra.value === "") {
-            mensaje.innerHTML = "<p style='color:red;'>Seleccione un tipo de obra.</p>";
+            mostrarAlerta("warning", "Seleccione un tipo de obra.");
         } else {
             mensaje.innerHTML = "";
         }
