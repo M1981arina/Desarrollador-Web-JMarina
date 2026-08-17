@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Alcaldía - ARENILLAS VUELVE A BRILLAR{% endblock %}
+
+{% block content %}
+<section class="mb-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="card-title">Alcaldía de Arenillas</h1>
+            <p class="card-text">Esta es la sección dedicada a la Alcaldía de Arenillas, donde encontrarás información sobre la administración municipal y las gestiones realizadas por la alcaldía.</p>
+            <hr>
+            <h3>Misión</h3>
+            <p>Impulsar el desarrollo integral de Arenillas a través de proyectos de infraestructura y servicios municipales de calidad.</p>
+            <h3>Visión</h3>
+            <p>Ser una municipalidad moderna, transparente y comprometida con el bienestar de los ciudadanos de Arenillas.</p>
+            <div class="mt-4">
+                <a href="{{ url_for('hello') }}" class="btn btn-primary">Volver al Inicio</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

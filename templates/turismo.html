@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Turismo - ARENILLAS VUELVE A BRILLAR{% endblock %}
+
+{% block content %}
+<section class="mb-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="card-title">Turismo en Arenillas</h1>
+            <p class="card-text">Descubre los atractivos turísticos y destinos que ofrece Arenillas.</p>
+            <hr>
+            <div class="row g-3 mb-4">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Playas</h5>
+                            <p class="card-text">Hermosas playas con arena blanca y aguas cristalinas, ideales para relajación y deportes acuáticos.</p>
+                            <ul>
+                                <li>Playa Arenillas</li>
+                                <li>Playa Puerto Bolívar</li>
+                                <li>Playa Naranjal</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Gastronomía</h5>
+                            <p class="card-text">Disfruta de la deliciosa comida local y internacional en nuestros restaurantes.</p>
+                            <ul>
+                                <li>Comida marinera</li>
+                                <li>Ceviches tradicionales</li>
+                                <li>Platos locales</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Patrimonio Cultural</h5>
+                            <p class="card-text">Conoce la historia y cultura de Arenillas.</p>
+                            <ul>
+                                <li>Museo Local</li>
+                                <li>Sitios Históricos</li>
+                                <li>Tradiciones Locales</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Actividades</h5>
+                            <p class="card-text">Participa en diversas actividades recreativas y deportivas.</p>
+                            <ul>
+                                <li>Pesca deportiva</li>
+                                <li>Tours guiados</li>
+                                <li>Eventos comunitarios</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info">
+                <strong>Información:</strong> Para reservas y más detalles, contacta con la oficina de turismo.
+            </div>
+            <div class="mt-4">
+                <a href="{{ url_for('hello') }}" class="btn btn-primary">Volver al Inicio</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Municipio - ARENILLAS VUELVE A BRILLAR{% endblock %}
+
+{% block content %}
+<section class="mb-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="card-title">Municipio de Arenillas</h1>
+            <p class="card-text">Información sobre el municipio de Arenillas, su organización administrativa y estructura municipal.</p>
+            <hr>
+            <h3>Estructura Administrativa</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Dependencias Principales:</h5>
+                    <ul>
+                        <li>Dirección de Obras Públicas</li>
+                        <li>Departamento de Servicios</li>
+                        <li>Unidad de Transparencia</li>
+                        <li>Departamento de Recursos Humanos</li>
+                        <li>Tesorería Municipal</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>Servicios Municipales:</h5>
+                    <ul>
+                        <li>Registros y Cedulación</li>
+                        <li>Permisos y Licencias</li>
+                        <li>Servicios de Agua y Alcantarillado</li>
+                        <li>Mantenimiento de Vías</li>
+                        <li>Gestión de Residuos</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-4">
+                <a href="{{ url_for('hello') }}" class="btn btn-primary">Volver al Inicio</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

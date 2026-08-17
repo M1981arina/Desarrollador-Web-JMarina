@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Servicios - ARENILLAS VUELVE A BRILLAR{% endblock %}
+
+{% block content %}
+<section class="mb-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="card-title">Servicios Municipales</h1>
+            <p class="card-text">Conoce todos los servicios que ofrece la municipalidad de Arenillas.</p>
+            <hr>
+            <div class="row g-3 mb-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-water"></i> Agua Potable
+                            </h5>
+                            <p class="card-text">Distribución de agua potable y mantenimiento de acueductos.</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Más info</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-recycle"></i> Recolección de Basura
+                            </h5>
+                            <p class="card-text">Servicio de recolección y disposición de residuos sólidos.</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Más info</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-lightning"></i> Alumbrado Público
+                            </h5>
+                            <p class="card-text">Mantenimiento del alumbrado público en toda la ciudad.</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Más info</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-person-bounding-box"></i> Registros Civiles
+                            </h5>
+                            <p class="card-text">Servicios de registros, cedulación y actas.</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Más info</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-building"></i> Permisos
+                            </h5>
+                            <p class="card-text">Gestión de permisos y licencias comerciales.</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Más info</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-book"></i> Educación
+                            </h5>
+                            <p class="card-text">Gestión de servicios educativos municipales.</p>
+                            <a href="#" class="btn btn-sm btn-outline-primary">Más info</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-success">
+                <strong>Horarios de atención:</strong> Lunes a viernes de 8:00 AM a 4:00 PM
+            </div>
+            <div class="mt-4">
+                <a href="{{ url_for('hello') }}" class="btn btn-primary">Volver al Inicio</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

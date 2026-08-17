@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Contacto - ARENILLAS VUELVE A BRILLAR{% endblock %}
+
+{% block content %}
+<section class="mb-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="card-title">Contacto</h1>
+            <p class="card-text">Ponte en contacto con nosotros. Estamos aquí para ayudarte.</p>
+            <hr>
+            <div class="row g-4 mb-4">
+                <div class="col-lg-6">
+                    <h3>Información de Contacto</h3>
+                    <div class="mb-3">
+                        <h5>Teléfono</h5>
+                        <p>
+                            <i class="bi bi-telephone"></i>
+                            <a href="tel:+593969280318">+593 969280318</a>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Correo Electrónico</h5>
+                        <p>
+                            <i class="bi bi-envelope"></i>
+                            <a href="mailto:arenillasbrilla@gmail.com">arenillasbrilla@gmail.com</a>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Dirección</h5>
+                        <p>
+                            <i class="bi bi-geo-alt"></i>
+                            Avda Jose Moncada, Arenillas, Ecuador
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Horarios de Atención</h5>
+                        <p>
+                            <strong>Lunes a Viernes:</strong> 8:00 AM - 4:00 PM<br>
+                            <strong>Sábado:</strong> 9:00 AM - 1:00 PM<br>
+                            <strong>Domingo:</strong> Cerrado
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <h5>Redes Sociales</h5>
+                        <a href="https://www.facebook.com" target="_blank" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="bi bi-facebook"></i> Facebook
+                        </a>
+                        <a href="https://www.twitter.com" target="_blank" class="btn btn-outline-info btn-sm">
+                            <i class="bi bi-twitter"></i> Twitter
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h3>Formulario de Contacto</h3>
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="correo" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="correo" name="correo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono">
+                        </div>
+                        <div class="mb-3">
+                            <label for="asunto" class="form-label">Asunto</label>
+                            <input type="text" class="form-control" id="asunto" name="asunto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="mensaje" class="form-label">Mensaje</label>
+                            <textarea class="form-control" id="mensaje" name="mensaje" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Enviar Mensaje</button>
+                        <button type="reset" class="btn btn-secondary">Limpiar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="ratio ratio-16x9 shadow-sm rounded-3 overflow-hidden">
+                <iframe src="https://www.youtube.com/embed/cVoJO982cwI" title="Video de Arenillas" allowfullscreen></iframe>
+            </div>
+            <div class="mt-4">
+                <a href="{{ url_for('hello') }}" class="btn btn-primary">Volver al Inicio</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

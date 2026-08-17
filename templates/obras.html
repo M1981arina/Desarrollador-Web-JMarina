@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Obras - ARENILLAS VUELVE A BRILLAR{% endblock %}
+
+{% block content %}
+<section class="mb-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="card-title">Obras Municipales</h1>
+            <p class="card-text">Consulta el estado y detalles de las obras públicas ejecutadas en Arenillas.</p>
+            <hr>
+            <h3>Categorías de Obras</h3>
+            <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
+                <div class="col">
+                    <div class="card border-primary">
+                        <div class="card-body">
+                            <h5 class="card-title">Obras Viales</h5>
+                            <p class="card-text">Proyectos de construcción y mejora de infraestructura vial.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-warning">
+                        <div class="card-body">
+                            <h5 class="card-title">Obras de Servicios</h5>
+                            <p class="card-text">Proyectos de agua, alcantarillado y servicios básicos.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-primary">
+                        <div class="card-body">
+                            <h5 class="card-title">Parques y Espacios Públicos</h5>
+                            <p class="card-text">Mejora de espacios verdes y áreas de recreación.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-warning">
+                        <div class="card-body">
+                            <h5 class="card-title">Infraestructura Educativa</h5>
+                            <p class="card-text">Construcción y mantenimiento de establecimientos educativos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info" role="alert">
+                <strong>Nota:</strong> Para más información sobre obras específicas, consulta el formulario de registro en la página principal.
+            </div>
+            <div class="mt-4">
+                <a href="{{ url_for('hello') }}" class="btn btn-primary">Volver al Inicio</a>
+                <a href="{{ url_for('obras_por_registrar') }}" class="btn btn-success">Ver Obras por Registrar</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

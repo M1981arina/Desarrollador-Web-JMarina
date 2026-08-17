@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Noticias - ARENILLAS VUELVE A BRILLAR{% endblock %}
+
+{% block content %}
+<section class="mb-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="card-title">Noticias de Arenillas</h1>
+            <p class="card-text">Mantente informado sobre los últimos eventos, proyectos y noticias de nuestra ciudad.</p>
+            <hr>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Nuevas Obras Iniciadas</h5>
+                            <p class="card-text">Se dieron inicio a los trabajos de infraestructura vial en la zona norte de la ciudad.</p>
+                            <small class="text-muted">Publicado hace 2 días</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Mejora de Servicios Públicos</h5>
+                            <p class="card-text">Se completó el proyecto de modernización del sistema de agua potable.</p>
+                            <small class="text-muted">Publicado hace 5 días</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Inauguración de Parque</h5>
+                            <p class="card-text">Se inauguró el nuevo parque recreacional con áreas verdes y juegos infantiles.</p>
+                            <small class="text-muted">Publicado hace 1 semana</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Plataforma Digital Lanzada</h5>
+                            <p class="card-text">Se lanzó la plataforma "Arenillas Vuelve a Brillar" para transparencia municipal.</p>
+                            <small class="text-muted">Publicado hace 2 semanas</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <a href="{{ url_for('hello') }}" class="btn btn-primary">Volver al Inicio</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
