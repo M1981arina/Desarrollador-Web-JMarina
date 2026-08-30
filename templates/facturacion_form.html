@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Formulario de Facturación - ARENILLAS VUELVE A BRILLAR{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card shadow-sm form-box">
+        <div class="card-body">
+            <h2 class="mb-4">{{ titulo }}</h2>
+
+            <form method="POST" novalidate>
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.cliente.label(class="form-label") }}
+                    {{ form.cliente(class="form-control") }}
+                    {% if form.cliente.errors %}
+                        {% for error in form.cliente.errors %}
+                            <div class="field-error">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            {{ form.subtotal.label(class="form-label") }}
+                            {{ form.subtotal(class="form-control") }}
+                            {% if form.subtotal.errors %}
+                                {% for error in form.subtotal.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            {{ form.iva.label(class="form-label") }}
+                            {{ form.iva(class="form-control") }}
+                            {% if form.iva.errors %}
+                                {% for error in form.iva.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            {{ form.total.label(class="form-label") }}
+                            {{ form.total(class="form-control") }}
+                            {% if form.total.errors %}
+                                {% for error in form.total.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form.estado.label(class="form-label") }}
+                    {{ form.estado(class="form-select") }}
+                    {% if form.estado.errors %}
+                        {% for error in form.estado.errors %}
+                            <div class="field-error">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="d-flex gap-2">
+                    {{ form.submit(class="btn btn-primary") }}
+                    <a href="{{ url_for('facturacion') }}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
