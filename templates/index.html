@@ -1,13 +1,16 @@
 {% extends "base.html" %}
 
+{% block title %}Inicio - ARENILLAS VUELVE A BRILLAR{% endblock %}
+
 {% block content %}
 <section id="inicio" class="mb-4">
     <div class="row g-4 align-items-center hero-section">
         <div class="col-lg-8">
-            <div class="card shadow-sm h-100">
+            <div class="card shadow-sm h-100 border-0">
                 <div class="card-body">
-                    <h2 class="card-title">Bienvenido a Arenillas Vuelve a Brillar</h2>
-                    <p class="card-text">Esta plataforma está diseñada para facilitar la administración y seguimiento de las obras realizadas en la ciudad, mejorando la transparencia y la comunicación con la comunidad.</p>
+                    <h2 class="card-title">{{ bienvenida }}</h2>
+                    <p class="card-text">{{ municipio.nombre|upper }} es una ciudad comprometida con la mejora continua de su infraestructura, servicios y calidad de vida.</p>
+                    <p class="card-text">Nuestra plataforma centraliza información clave para ciudadanos, funcionarios y proyectos municipales.</p>
                 </div>
             </div>
         </div>
@@ -15,10 +18,36 @@
             <div class="card border-primary shadow-sm h-100">
                 <div class="card-body">
                     <h5 class="card-title">Resumen rápido</h5>
-                    <p class="card-text">Administra obras, reporta avances y comparte datos con los ciudadanos desde una interfaz moderna y responsiva.</p>
+                    <p class="card-text">Población: {{ municipio.habitantes }} habitantes</p>
+                    <p class="card-text">Provincia: {{ municipio.provincia }}</p>
                     <span class="badge bg-primary">Responsiva</span>
                     <span class="badge bg-warning text-dark">Bootstrap</span>
                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="servicios" class="mb-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title">Servicios y prioridades</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-3">
+                {% for servicio in servicios_destacados %}
+                <div class="col">
+                    <div class="card h-100 border-primary">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ servicio.nombre }}</h5>
+                            <p class="card-text">{{ servicio.descripcion }}</p>
+                            {% if servicio.estado == 'Activa' %}
+                            <span class="badge bg-success">{{ servicio.estado }}</span>
+                            {% else %}
+                            <span class="badge bg-secondary">{{ servicio.estado }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -37,43 +66,9 @@
         </div>
         <div class="col-lg-4">
             <div class="card shadow-sm">
-                <img src="{{ url_for('static', filename='img/arenillas.jpg') }}" class="card-img-top" alt="Descripción de la imagen">
+                <img src="{{ url_for('static', filename='img/imagen.svg') }}" class="card-img-top" alt="Descripción de la imagen">
                 <div class="card-body">
                     <p class="card-text">Imágenes y recursos locales ayudan a conectar con la comunidad y darle identidad visual al proyecto.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="servicios" class="mb-4">
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h2 class="card-title">Servicios</h2>
-            <div class="row row-cols-1 row-cols-md-3 g-3">
-                <div class="col">
-                    <div class="card h-100 border-primary">
-                        <div class="card-body">
-                            <h5 class="card-title">Obras Públicas</h5>
-                            <p class="card-text">Administración de proyectos de infraestructura para carreteras, parques y colegios.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 border-warning">
-                        <div class="card-body">
-                            <h5 class="card-title">Transparencia</h5>
-                            <p class="card-text">Gestión municipal clara con información accesible a todos los ciudadanos.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 border-primary">
-                        <div class="card-body">
-                            <h5 class="card-title">Comunicación</h5>
-                            <p class="card-text">Canales de contacto directos para recibir opiniones, reportes y sugerencias.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
