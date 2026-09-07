@@ -99,7 +99,7 @@ def hello():
 
     return render_template(
         "index.html",
-        bienvenida="Bienvenido a Arenillas Vuelve a Brillar",
+        bienvenida="Bienvenido a Arenillas Vuelve a Brillar con Orgullo",
         municipio=municipio,
         servicios_destacados=servicios_destacados,
     )
