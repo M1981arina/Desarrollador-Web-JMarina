@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Obras - ARENILLAS VUELVE A BRILLAR{% endblock %}
+{% block title %}Obras - ARENILLAS VUELVE A BRILLAR CON ORGULLO{% endblock %}
 
 {% block content %}
 <section class="mb-4">
@@ -9,40 +9,22 @@
             <h1 class="card-title">Obras Municipales</h1>
             <p class="card-text">Consulta el estado y detalles de las obras públicas ejecutadas en Arenillas.</p>
             <hr>
-            <h3>Categorías de Obras</h3>
-            <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
+            <h3>Obras registradas</h3>
+            <div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
+                {% for obra in obras_list %}
                 <div class="col">
-                    <div class="card border-primary">
+                    <div class="card h-100 border-primary">
                         <div class="card-body">
-                            <h5 class="card-title">Obras Viales</h5>
-                            <p class="card-text">Proyectos de construcción y mejora de infraestructura vial.</p>
+                            <h5 class="card-title">{{ obra.nombre }}</h5>
+                            <p class="text-muted mb-2">{{ obra.tipo }}{% if obra.ubicacion %} · {{ obra.ubicacion }}{% endif %}</p>
+                            <p class="card-text">{{ obra.descripcion }}</p>
+                            <span class="badge bg-success">{{ obra.estado }}</span>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card border-warning">
-                        <div class="card-body">
-                            <h5 class="card-title">Obras de Servicios</h5>
-                            <p class="card-text">Proyectos de agua, alcantarillado y servicios básicos.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card border-primary">
-                        <div class="card-body">
-                            <h5 class="card-title">Parques y Espacios Públicos</h5>
-                            <p class="card-text">Mejora de espacios verdes y áreas de recreación.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card border-warning">
-                        <div class="card-body">
-                            <h5 class="card-title">Infraestructura Educativa</h5>
-                            <p class="card-text">Construcción y mantenimiento de establecimientos educativos.</p>
-                        </div>
-                    </div>
-                </div>
+                {% else %}
+                <div class="col-12"><p class="text-muted">Todavía no hay obras registradas.</p></div>
+                {% endfor %}
             </div>
             <div class="alert alert-info" role="alert">
                 <strong>Nota:</strong> Para más información sobre obras específicas, consulta el formulario de registro en la página principal.
