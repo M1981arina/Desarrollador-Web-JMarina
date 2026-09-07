@@ -1,18 +1,62 @@
+import os
+import sqlite3
+
 from flask import Flask, render_template, redirect, url_for, flash
+from flask_wtf.csrf import CSRFProtect
 
 from forms.clientes import ClienteForm
 from forms.facturacion import FacturaForm
-from forms.productos import ProductoForm
+from forms.obras import ObraForm
+from forms.tramites import TramiteForm
 from forms.proveedores import ProveedorForm
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "arenillas-secret-key-2026"
+csrf = CSRFProtect(app)
 
-productos_db = [
-    {"id": 1, "nombre": "Rehabilitación de la avenida central", "tipo": "Vial", "encargado": "Dirección de Obras", "avance": 82, "estado": "En ejecución"},
-    {"id": 2, "nombre": "Mejoramiento del parque municipal", "tipo": "Espacio público", "encargado": "Área de Parques", "avance": 65, "estado": "En revisión"},
-    {"id": 3, "nombre": "Sistema de agua potable", "tipo": "Servicio básico", "encargado": "Departamento de Agua", "avance": 90, "estado": "Finalizado"},
-]
+DATA_DIR = os.path.join(app.root_path, "data")
+DATABASE_PATH = os.path.join(DATA_DIR, "ferreteria.db")
+
+
+def get_db_connection():
+    conn = sqlite3.connect(DATABASE_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def init_db():
+    os.makedirs(DATA_DIR, exist_ok=True)
+    conn = get_db_connection()
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS obras (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            tipo TEXT NOT NULL,
+            descripcion TEXT NOT NULL,
+            ubicacion TEXT,
+            presupuesto REAL,
+            estado TEXT NOT NULL DEFAULT 'Registrada'
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS tramites_solicitudes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            email TEXT NOT NULL,
+            tipo TEXT NOT NULL,
+            detalle TEXT NOT NULL,
+            estado TEXT NOT NULL DEFAULT 'Recibida'
+        )
+        """
+    )
+    conn.commit()
+    conn.close()
+
+
+init_db()
 
 clientes_db = [
     {"id": 1, "nombre": "Ana Torres", "email": "ana@correo.com", "telefono": "0987654321", "cedula": "0950000001"},
@@ -87,17 +131,37 @@ def municipio():
 
 @app.route('/obras')
 def obras():
-    obras_list = [
-        {"nombre": "Rehabilitación de la avenida principal", "tipo": "Vial", "avance": 80, "stock": 5},
-        {"nombre": "Parque Central", "tipo": "Espacio público", "avance": 65, "stock": 0},
-        {"nombre": "Mejoramiento del sistema de agua", "tipo": "Servicios", "avance": 90, "stock": 2},
-    ]
+    conn = get_db_connection()
+    obras_list = conn.execute(
+        'SELECT id, nombre, tipo, descripcion, ubicacion, presupuesto, estado FROM obras ORDER BY id DESC'
+    ).fetchall()
+    conn.close()
     return render_template("obras.html", obras_list=obras_list)
 
 
-@app.route('/obras_por_registrar')
+@app.route('/obras_por_registrar', methods=['GET', 'POST'])
 def obras_por_registrar():
-    return render_template("obras_por_registrar.html")
+    form = ObraForm()
+    if form.validate_on_submit():
+        conn = get_db_connection()
+        conn.execute(
+            """
+            INSERT INTO obras (nombre, tipo, descripcion, ubicacion, presupuesto)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                form.nombre.data,
+                form.tipo.data,
+                form.descripcion.data,
+                form.ubicacion.data,
+                form.presupuesto.data,
+            ),
+        )
+        conn.commit()
+        conn.close()
+        flash('Obra registrada correctamente.', 'success')
+        return redirect(url_for('obras'))
+    return render_template("obras_por_registrar.html", form=form)
 
 
 @app.route('/noticias')
@@ -111,11 +175,28 @@ def noticias():
 
 @app.route('/tramites')
 def tramites():
-    tramites_list = [
-        {"nombre": "Permisos de construcción", "estado": "Disponible"},
-        {"nombre": "Registro civil", "estado": "Disponible"},
-    ]
-    return render_template("tramites.html", tramites_list=tramites_list)
+    form = TramiteForm()
+    conn = get_db_connection()
+    solicitudes = conn.execute(
+        'SELECT id, nombre, tipo, estado FROM tramites_solicitudes ORDER BY id DESC'
+    ).fetchall()
+    conn.close()
+    return render_template("tramites.html", form=form, solicitudes=solicitudes)
+
+
+@app.route('/tramites/solicitar', methods=['POST'])
+def solicitar_tramite():
+    form = TramiteForm()
+    if form.validate_on_submit():
+        conn = get_db_connection()
+        conn.execute(
+            'INSERT INTO tramites_solicitudes (nombre, email, tipo, detalle) VALUES (?, ?, ?, ?)',
+            (form.nombre.data, form.email.data, form.tipo.data, form.detalle.data),
+        )
+        conn.commit()
+        conn.close()
+        flash('Solicitud de trámite enviada correctamente.', 'success')
+    return redirect(url_for('tramites'))
 
 
 @app.route('/servicios')
@@ -145,46 +226,6 @@ def contactos():
         "direccion": "Avda José Moncada, Arenillas, Ecuador",
     }
     return render_template("contactos.html", contacto=contacto)
-
-
-@app.route('/productos', methods=['GET'])
-def productos():
-    return render_template('productos.html', productos=productos_db)
-
-
-@app.route('/productos/nuevo', methods=['GET', 'POST'])
-def nuevo_producto():
-    form = ProductoForm()
-    if form.validate_on_submit():
-        producto = {
-            'id': len(productos_db) + 1,
-            'nombre': form.nombre.data,
-            'categoria': form.categoria.data,
-            'precio': form.precio.data,
-            'stock': form.stock.data,
-        }
-        productos_db.append(producto)
-        flash('Producto registrado correctamente.', 'success')
-        return redirect(url_for('productos'))
-    return render_template('productos_form.html', form=form, titulo='Registrar obra', accion='Registrar')
-
-
-@app.route('/productos/<int:producto_id>/editar', methods=['GET', 'POST'])
-def editar_producto(producto_id):
-    producto = next((item for item in productos_db if item['id'] == producto_id), None)
-    if producto is None:
-        flash('Producto no encontrado.', 'danger')
-        return redirect(url_for('productos'))
-
-    form = ProductoForm(obj=producto)
-    if form.validate_on_submit():
-        producto['nombre'] = form.nombre.data
-        producto['categoria'] = form.categoria.data
-        producto['precio'] = form.precio.data
-        producto['stock'] = form.stock.data
-        flash('Producto actualizado correctamente.', 'success')
-        return redirect(url_for('productos'))
-    return render_template('productos_form.html', form=form, titulo='Editar obra', accion='Actualizar')
 
 
 @app.route('/clientes', methods=['GET'])

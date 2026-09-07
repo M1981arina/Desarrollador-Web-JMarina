@@ -9,37 +9,35 @@
             <h1 class="card-title">Obras por Registrar</h1>
             <p class="card-text">Formulario para registrar nuevas obras municipales que requieren seguimiento y control.</p>
             <hr>
-            <form method="POST" class="row g-3">
+            <form method="POST" class="row g-3" novalidate>
+                {{ form.hidden_tag() }}
                 <div class="col-md-6">
-                    <label for="nombreObra" class="form-label">Nombre de la obra</label>
-                    <input type="text" class="form-control" id="nombreObra" name="nombre" required>
+                    {{ form.nombre.label(class="form-label") }}
+                    {{ form.nombre(class="form-control", id="nombreObra") }}
+                    {% for error in form.nombre.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
                 </div>
                 <div class="col-md-6">
-                    <label for="tipoObra" class="form-label">Tipo de obra</label>
-                    <select class="form-select" id="tipoObra" name="tipo" required>
-                        <option value="">Seleccione un tipo...</option>
-                        <option value="Vial">Vial</option>
-                        <option value="Parque">Parque</option>
-                        <option value="Educación">Educación</option>
-                        <option value="Salud">Salud</option>
-                        <option value="Turismo">Turismo</option>
-                        <option value="Servicios">Servicios Básicos</option>
-                    </select>
+                    {{ form.tipo.label(class="form-label") }}
+                    {{ form.tipo(class="form-select", id="tipoObra") }}
+                    {% for error in form.tipo.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
                 </div>
                 <div class="col-12">
-                    <label for="descripcionObra" class="form-label">Descripción detallada</label>
-                    <textarea class="form-control" id="descripcionObra" name="descripcion" rows="4" required></textarea>
+                    {{ form.descripcion.label(class="form-label") }}
+                    {{ form.descripcion(class="form-control", id="descripcionObra", rows="4") }}
+                    {% for error in form.descripcion.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
                 </div>
                 <div class="col-md-6">
-                    <label for="ubicacion" class="form-label">Ubicación</label>
-                    <input type="text" class="form-control" id="ubicacion" name="ubicacion">
+                    {{ form.ubicacion.label(class="form-label") }}
+                    {{ form.ubicacion(class="form-control") }}
+                    {% for error in form.ubicacion.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
                 </div>
                 <div class="col-md-6">
-                    <label for="presupuesto" class="form-label">Presupuesto Aproximado</label>
-                    <input type="number" class="form-control" id="presupuesto" name="presupuesto" min="0" step="0.01">
+                    {{ form.presupuesto.label(class="form-label") }}
+                    {{ form.presupuesto(class="form-control", step="0.01", min="0") }}
+                    {% for error in form.presupuesto.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
                 </div>
                 <div class="col-12">
-                    <button type="submit" class="btn btn-success">Registrar Obra</button>
+                    {{ form.submit(class="btn btn-success") }}
                     <button type="reset" class="btn btn-secondary">Limpiar</button>
                 </div>
             </form>

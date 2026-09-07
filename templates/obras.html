@@ -9,23 +9,21 @@
             <h1 class="card-title">Obras Municipales</h1>
             <p class="card-text">Consulta el estado y detalles de las obras públicas ejecutadas en Arenillas.</p>
             <hr>
-            <h3>Listado dinámico de obras</h3>
+            <h3>Obras registradas</h3>
             <div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
                 {% for obra in obras_list %}
                 <div class="col">
                     <div class="card h-100 border-primary">
                         <div class="card-body">
                             <h5 class="card-title">{{ obra.nombre }}</h5>
-                            <p class="text-muted mb-2">{{ obra.tipo }}</p>
-                            <p class="card-text">Avance: {{ obra.avance }}%</p>
-                            {% if obra.stock > 0 %}
-                            <span class="badge bg-success">Disponible</span>
-                            {% else %}
-                            <span class="badge bg-danger">Agotado</span>
-                            {% endif %}
+                            <p class="text-muted mb-2">{{ obra.tipo }}{% if obra.ubicacion %} · {{ obra.ubicacion }}{% endif %}</p>
+                            <p class="card-text">{{ obra.descripcion }}</p>
+                            <span class="badge bg-success">{{ obra.estado }}</span>
                         </div>
                     </div>
                 </div>
+                {% else %}
+                <div class="col-12"><p class="text-muted">Todavía no hay obras registradas.</p></div>
                 {% endfor %}
             </div>
             <div class="alert alert-info" role="alert">
