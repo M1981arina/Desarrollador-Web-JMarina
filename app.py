@@ -1,9 +1,7 @@
-import os
-import sqlite3
-
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_wtf.csrf import CSRFProtect
 
+from conexion.conexion import execute_db, get_db_connection, init_db
 from forms.clientes import ClienteForm
 from forms.facturacion import FacturaForm
 from forms.obras import ObraForm
@@ -13,48 +11,6 @@ from forms.proveedores import ProveedorForm
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "arenillas-secret-key-2026"
 csrf = CSRFProtect(app)
-
-DATA_DIR = os.path.join(app.root_path, "data")
-DATABASE_PATH = os.path.join(DATA_DIR, "ferreteria.db")
-
-
-def get_db_connection():
-    conn = sqlite3.connect(DATABASE_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
-
-
-def init_db():
-    os.makedirs(DATA_DIR, exist_ok=True)
-    conn = get_db_connection()
-    conn.execute(
-        """
-        CREATE TABLE IF NOT EXISTS obras (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT NOT NULL,
-            tipo TEXT NOT NULL,
-            descripcion TEXT NOT NULL,
-            ubicacion TEXT,
-            presupuesto REAL,
-            estado TEXT NOT NULL DEFAULT 'Registrada'
-        )
-        """
-    )
-    conn.execute(
-        """
-        CREATE TABLE IF NOT EXISTS tramites_solicitudes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT NOT NULL,
-            email TEXT NOT NULL,
-            tipo TEXT NOT NULL,
-            detalle TEXT NOT NULL,
-            estado TEXT NOT NULL DEFAULT 'Recibida'
-        )
-        """
-    )
-    conn.commit()
-    conn.close()
-
 
 init_db()
 
@@ -132,7 +88,8 @@ def municipio():
 @app.route('/obras')
 def obras():
     conn = get_db_connection()
-    obras_list = conn.execute(
+    obras_list = execute_db(
+        conn,
         'SELECT id, nombre, tipo, descripcion, ubicacion, presupuesto, estado FROM obras ORDER BY id DESC'
     ).fetchall()
     conn.close()
@@ -144,7 +101,8 @@ def obras_por_registrar():
     form = ObraForm()
     if form.validate_on_submit():
         conn = get_db_connection()
-        conn.execute(
+        execute_db(
+            conn,
             """
             INSERT INTO obras (nombre, tipo, descripcion, ubicacion, presupuesto)
             VALUES (?, ?, ?, ?, ?)
@@ -161,7 +119,66 @@ def obras_por_registrar():
         conn.close()
         flash('Obra registrada correctamente.', 'success')
         return redirect(url_for('obras'))
-    return render_template("obras_por_registrar.html", form=form)
+    return render_template("formulario_obras.html", form=form, titulo="Registrar obra", accion="Registrar")
+
+
+@app.route('/obras/<int:obra_id>/editar', methods=['GET', 'POST'])
+def editar_obra(obra_id):
+    conn = get_db_connection()
+    obra = execute_db(
+        conn,
+        'SELECT id, nombre, tipo, descripcion, ubicacion, presupuesto, estado FROM obras WHERE id = ?',
+        (obra_id,),
+    ).fetchone()
+    conn.close()
+
+    if obra is None:
+        flash('Obra no encontrada.', 'danger')
+        return redirect(url_for('obras'))
+
+    form = ObraForm(obj=obra)
+    if form.validate_on_submit():
+        conn = get_db_connection()
+        execute_db(
+            conn,
+            """
+            UPDATE obras
+            SET nombre = ?, tipo = ?, descripcion = ?, ubicacion = ?, presupuesto = ?
+            WHERE id = ?
+            """,
+            (
+                form.nombre.data,
+                form.tipo.data,
+                form.descripcion.data,
+                form.ubicacion.data,
+                form.presupuesto.data,
+                obra_id,
+            ),
+        )
+        conn.commit()
+        conn.close()
+        flash('Obra actualizada correctamente.', 'success')
+        return redirect(url_for('obras'))
+
+    return render_template(
+        "formulario_obras.html",
+        form=form,
+        titulo="Editar obra",
+        accion="Actualizar",
+    )
+
+
+@app.route('/obras/<int:obra_id>/eliminar', methods=['POST'])
+def eliminar_obra(obra_id):
+    conn = get_db_connection()
+    result = execute_db(conn, 'DELETE FROM obras WHERE id = ?', (obra_id,))
+    conn.commit()
+    conn.close()
+    if result.rowcount == 0:
+        flash('Obra no encontrada.', 'danger')
+    else:
+        flash('Obra eliminada correctamente.', 'success')
+    return redirect(url_for('obras'))
 
 
 @app.route('/noticias')
@@ -177,7 +194,8 @@ def noticias():
 def tramites():
     form = TramiteForm()
     conn = get_db_connection()
-    solicitudes = conn.execute(
+    solicitudes = execute_db(
+        conn,
         'SELECT id, nombre, tipo, estado FROM tramites_solicitudes ORDER BY id DESC'
     ).fetchall()
     conn.close()
@@ -189,7 +207,8 @@ def solicitar_tramite():
     form = TramiteForm()
     if form.validate_on_submit():
         conn = get_db_connection()
-        conn.execute(
+        execute_db(
+            conn,
             'INSERT INTO tramites_solicitudes (nombre, email, tipo, detalle) VALUES (?, ?, ?, ?)',
             (form.nombre.data, form.email.data, form.tipo.data, form.detalle.data),
         )

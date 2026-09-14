@@ -6,7 +6,7 @@
 <section class="mb-4">
     <div class="card shadow-sm">
         <div class="card-body">
-            <h1 class="card-title">Obras por Registrar</h1>
+            <h1 class="card-title">{{ titulo }}</h1>
             <p class="card-text">Formulario para registrar nuevas obras municipales que requieren seguimiento y control.</p>
             <hr>
             <form method="POST" class="row g-3" novalidate>
@@ -37,7 +37,7 @@
                     {% for error in form.presupuesto.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
                 </div>
                 <div class="col-12">
-                    {{ form.submit(class="btn btn-success") }}
+                    {{ form.submit(value=accion, class="btn btn-success") }}
                     <button type="reset" class="btn btn-secondary">Limpiar</button>
                 </div>
             </form>
