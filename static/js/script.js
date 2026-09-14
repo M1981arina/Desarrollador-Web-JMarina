@@ -33,7 +33,7 @@ function mostrarObras() {
     if (obras.length === 0) {
         listaObras.innerHTML = `
             <div class="col">
-                <div class="alert alert-warning">No existen obras registradas.</div>
+                <div class="alert alert-success">No existen obras registradas.</div>
             </div>
         `;
         if (totalObras) totalObras.textContent = "0";
@@ -49,7 +49,7 @@ function mostrarObras() {
                     <div class="card-body">
                         <h5 class="card-title">${obra.nombre}</h5>
                         <p class="card-text">${obra.descripcion}</p>
-                        <span class="badge bg-warning text-dark">${obra.tipo}</span>
+                        <span class="badge bg-success">${obra.tipo}</span>
                     </div>
                     <div class="card-footer bg-transparent d-flex justify-content-between gap-2">
                         <button type="button" class="btn btn-primary btn-sm" onclick="abrirModalDetalle(${i})">Ver detalles</button>
@@ -85,7 +85,7 @@ function eliminarObra(i) {
         obras.splice(i, 1);
         mostrarObras();
         mostrarSpinner(false);
-        mostrarAlerta("warning", "Obra eliminada correctamente.");
+        mostrarAlerta("success", "Obra eliminada correctamente.");
     }, 500);
 }
 
@@ -123,7 +123,7 @@ if (formulario) {
 if (tipoObra) {
     tipoObra.addEventListener("change", function () {
         if (tipoObra.value === "") {
-            mostrarAlerta("warning", "Seleccione un tipo de obra.");
+            mostrarAlerta("success", "Seleccione un tipo de obra.");
         } else {
             if (mensaje) mensaje.innerHTML = "";
         }

@@ -1,1 +1,9 @@
 @import url("styles.css");
+
+.bg-warning {
+	background-color: #198754 !important;
+}
+
+.border-warning {
+	border-color: #198754 !important;
+}

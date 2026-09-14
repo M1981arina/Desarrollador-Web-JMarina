@@ -39,7 +39,7 @@
                                 {% if factura.estado == 'Pagada' %}
                                     <span class="badge bg-success">{{ factura.estado }}</span>
                                 {% elif factura.estado == 'Pendiente' %}
-                                    <span class="badge bg-warning text-dark">{{ factura.estado }}</span>
+                                    <span class="badge bg-success">{{ factura.estado }}</span>
                                 {% else %}
                                     <span class="badge bg-secondary">{{ factura.estado }}</span>
                                 {% endif %}
