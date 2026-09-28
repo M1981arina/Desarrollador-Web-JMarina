@@ -1,5 +1,5 @@
-Flask
-Flask-WTF
-email-validator
-mysql-connector-python
-psycopg2-binary
+Flask==3.0.2
+Flask-Login==0.6.3
+psycopg2-binary==2.9.9
+Werkzeug==3.0.1
+gunicorn==21.2.0

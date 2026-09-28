@@ -1,373 +1,176 @@
-from flask import Flask, render_template, redirect, url_for, flash
-from flask_wtf.csrf import CSRFProtect
-
-from conexion.conexion import execute_db, get_db_connection, init_db
-from forms.clientes import ClienteForm
-from forms.facturacion import FacturaForm
-from forms.obras import ObraForm
-from forms.tramites import TramiteForm
-from forms.proveedores import ProveedorForm
+import os
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+import psycopg2
+import psycopg2.extras
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "arenillas-secret-key-2026"
-csrf = CSRFProtect(app)
+app.secret_key = 'clave_secreta_para_sesiones'
 
-init_db()
+# Configuración de Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
-clientes_db = [
-    {"id": 1, "nombre": "Ana Torres", "email": "ana@correo.com", "telefono": "0987654321", "cedula": "0950000001"},
-    {"id": 2, "nombre": "Carlos Ponce", "email": "carlos@correo.com", "telefono": "0981112233", "cedula": "0950000002"},
-]
-
-proveedores_db = [
-    {"id": 1, "nombre": "María López", "tramite": "Permiso de construcción", "email": "maria.lopez@correo.com", "telefono": "0999988777", "estado": "Activo"},
-    {"id": 2, "nombre": "Carlos Aguirre", "tramite": "Registro civil", "email": "carlos.aguirre@correo.com", "telefono": "0988776655", "estado": "En espera"},
-]
-
-facturas_db = [
-    {"id": 1, "cliente": "Ana Torres", "subtotal": 120.00, "iva": 18.00, "total": 138.00, "estado": "Pagada"},
-    {"id": 2, "cliente": "Carlos Ponce", "subtotal": 85.50, "iva": 12.83, "total": 98.33, "estado": "Pendiente"},
-]
-
-
-@app.context_processor
-def inject_global_context():
-    return {
-        "site_name": "ARENILLAS",
-        "year": 2026,
-    }
-
-
-@app.route('/')
-def hello():
-    municipio = {
-        "nombre": "Arenillas",
-        "provincia": "El Oro",
-        "habitantes": 46000,
-        "telefono": "+593 969280318",
-    }
-
-    servicios_destacados = [
-        {"nombre": "Obras Viales", "descripcion": "Rehabilitación de calles y accesos principales.", "estado": "Activa"},
-        {"nombre": "Servicios Básicos", "descripcion": "Mejoras en agua potable y alcantarillado.", "estado": "En operación"},
-        {"nombre": "Espacios Públicos", "descripcion": "Parques, jardines y áreas recreativas.", "estado": "Programada"},
-    ]
-
-    return render_template(
-        "index.html",
-        bienvenida="Bienvenido a Arenillas Vuelve a Brillar con Orgullo",
-        municipio=municipio,
-        servicios_destacados=servicios_destacados,
-    )
-
-
-@app.route('/alcaldia')
-def alcaldia():
-    return render_template("alcaldia.html", alcaldia_info={
-        "nombre": "Johanna Marina Castillo Rodriguez",
-        "cargo": "Alcaldesa",
-        "mensaje": "Trabajo para una ciudad más transparente, ordenada y moderna.",
-    })
-
-
-@app.route('/municipio')
-def municipio():
-    municipio_info = {
-        "nombre": "Arenillas",
-        "direccion": "Av. José Moncada",
-        "barrios": ["Centro", "San Vicente", "La Libertad", "El Progreso"],
-        "estadisticas": {
-            "habitantes": 46000,
-            "barrios": 12,
-            "proyectos": 25,
-        },
-    }
-    return render_template("municipio.html", municipio_info=municipio_info)
-
-
-@app.route('/obras')
-def obras():
-    conn = get_db_connection()
-    obras_list = execute_db(
-        conn,
-        'SELECT id, nombre, tipo, descripcion, ubicacion, presupuesto, estado FROM obras ORDER BY id DESC'
-    ).fetchall()
-    conn.close()
-    return render_template("obras.html", obras_list=obras_list)
-
-
-@app.route('/obras_por_registrar', methods=['GET', 'POST'])
-def obras_por_registrar():
-    form = ObraForm()
-    if form.validate_on_submit():
-        conn = get_db_connection()
-        execute_db(
-            conn,
-            """
-            INSERT INTO obras (nombre, tipo, descripcion, ubicacion, presupuesto)
-            VALUES (?, ?, ?, ?, ?)
-            """,
-            (
-                form.nombre.data,
-                form.tipo.data,
-                form.descripcion.data,
-                form.ubicacion.data,
-                form.presupuesto.data,
-            ),
+# Conexión a PostgreSQL (Compatible con local y con la variable de entorno de Render)
+def get_db_connection():
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    if DATABASE_URL:
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    else:
+        # Tus credenciales locales exactas de PostgreSQL
+        conn = psycopg2.connect(
+            host="localhost",
+            database="ARENILLAS VUELVE A BRILLAR",
+            user="postgres",
+            password="tu_password_local" # Reemplaza con tu contraseña de PostgreSQL
         )
-        conn.commit()
+    return conn
+
+class User(UserMixin):
+    def __init__(self, id_usuario, correo, rol):
+        self.id = id_usuario
+        self.correo = correo
+        self.rol = rol
+
+@login_manager.user_loader
+def load_user(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cursor.execute("SELECT * FROM usuarios WHERE id_usuario = %s", (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if user:
+        return User(user['id_usuario'], user['correo'], user['rol'])
+    return None
+
+# --- RUTAS DE AUTENTICACIÓN ---
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        correo = request.form['correo']
+        password = request.form['password']
+
+        conn = get_db_connection()
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute("SELECT * FROM usuarios WHERE correo = %s", (correo,))
+        user = cursor.fetchone()
+        cursor.close()
         conn.close()
-        flash('Obra registrada correctamente.', 'success')
-        return redirect(url_for('obras'))
-    return render_template("formulario_obras.html", form=form, titulo="Registrar obra", accion="Registrar")
 
+        if user and check_password_hash(user['password'], password):
+            user_obj = User(user['id_usuario'], user['correo'], user['rol'])
+            login_user(user_obj)
+            flash('Inicio de sesión exitoso.', 'success')
+            return redirect(url_for('listar_obras'))
+        else:
+            flash('Correo o contraseña incorrectos.', 'danger')
 
-@app.route('/obras/<int:obra_id>/editar', methods=['GET', 'POST'])
-def editar_obra(obra_id):
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Sesión cerrada correctamente.', 'info')
+    return redirect(url_for('login'))
+
+# --- OPERACIONES CRUD Y CONSULTA CON JOIN ---
+
+# 1. LEER (SELECT con JOIN entre obras_municipales, categorias_obras y usuarios)
+@app.route('/')
+@login_required
+def listar_obras():
     conn = get_db_connection()
-    obra = execute_db(
-        conn,
-        'SELECT id, nombre, tipo, descripcion, ubicacion, presupuesto, estado FROM obras WHERE id = ?',
-        (obra_id,),
-    ).fetchone()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cursor.execute("""
+        SELECT o.id_obra, o.titulo, o.ubicacion, o.presupuesto, c.nombre_categoria, u.nombres
+        FROM obras_municipales o
+        JOIN categorias_obras c ON o.id_categoria = c.id_categoria
+        JOIN usuarios u ON o.id_usuario = u.id_usuario
+        ORDER BY o.id_obra DESC;
+    """)
+    obras = cursor.fetchall()
+    cursor.close()
     conn.close()
+    return render_template('index.html', obras=obras)
 
-    if obra is None:
-        flash('Obra no encontrada.', 'danger')
-        return redirect(url_for('obras'))
+# 2. CREAR (INSERT con consultas parametrizadas)
+@app.route('/agregar', methods=['GET', 'POST'])
+@login_required
+def agregar_obra():
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-    form = ObraForm(obj=obra)
-    if form.validate_on_submit():
-        conn = get_db_connection()
-        execute_db(
-            conn,
-            """
-            UPDATE obras
-            SET nombre = ?, tipo = ?, descripcion = ?, ubicacion = ?, presupuesto = ?
-            WHERE id = ?
-            """,
-            (
-                form.nombre.data,
-                form.tipo.data,
-                form.descripcion.data,
-                form.ubicacion.data,
-                form.presupuesto.data,
-                obra_id,
-            ),
-        )
+    if request.method == 'POST':
+        titulo = request.form['titulo']
+        ubicacion = request.form['ubicacion']
+        presupuesto = request.form['presupuesto']
+        id_categoria = request.form['id_categoria']
+        id_usuario = current_user.id  # Usuario logueado actual
+
+        cursor.execute("""
+            INSERT INTO obras_municipales (titulo, ubicacion, presupuesto, id_categoria, id_usuario)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (titulo, ubicacion, presupuesto, id_categoria, id_usuario))
         conn.commit()
+        cursor.close()
+        conn.close()
+        flash('Obra registrada exitosamente.', 'success')
+        return redirect(url_for('listar_obras'))
+
+    cursor.execute("SELECT * FROM categorias_obras;")
+    categorias = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('agregar.html', categorias=categorias)
+
+# 3. ACTUALIZAR (UPDATE)
+@app.route('/editar/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editar_obra(id):
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    if request.method == 'POST':
+        titulo = request.form['titulo']
+        ubicacion = request.form['ubicacion']
+        presupuesto = request.form['presupuesto']
+        id_categoria = request.form['id_categoria']
+
+        cursor.execute("""
+            UPDATE obras_municipales
+            SET titulo = %s, ubicacion = %s, presupuesto = %s, id_categoria = %s
+            WHERE id_obra = %s
+        """, (titulo, ubicacion, presupuesto, id_categoria, id))
+        conn.commit()
+        cursor.close()
         conn.close()
         flash('Obra actualizada correctamente.', 'success')
-        return redirect(url_for('obras'))
+        return redirect(url_for('listar_obras'))
 
-    return render_template(
-        "formulario_obras.html",
-        form=form,
-        titulo="Editar obra",
-        accion="Actualizar",
-    )
+    cursor.execute("SELECT * FROM obras_municipales WHERE id_obra = %s", (id,))
+    obra = cursor.fetchone()
+    cursor.execute("SELECT * FROM categorias_obras;")
+    categorias = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('editar.html', obra=obra, categorias=categorias)
 
-
-@app.route('/obras/<int:obra_id>/eliminar', methods=['POST'])
-def eliminar_obra(obra_id):
+# 4. ELIMINAR (DELETE)
+@app.route('/eliminar/<int:id>')
+@login_required
+def eliminar_obra(id):
     conn = get_db_connection()
-    result = execute_db(conn, 'DELETE FROM obras WHERE id = ?', (obra_id,))
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM obras_municipales WHERE id_obra = %s", (id,))
     conn.commit()
+    cursor.close()
     conn.close()
-    if result.rowcount == 0:
-        flash('Obra no encontrada.', 'danger')
-    else:
-        flash('Obra eliminada correctamente.', 'success')
-    return redirect(url_for('obras'))
-
-
-@app.route('/noticias')
-def noticias():
-    noticias_list = [
-        {"titulo": "Apertura de talleres comunitarios", "estado": "Nuevo"},
-        {"titulo": "Avance de obras viales", "estado": "Activo"},
-    ]
-    return render_template("noticias.html", noticias_list=noticias_list)
-
-
-@app.route('/tramites')
-def tramites():
-    form = TramiteForm()
-    conn = get_db_connection()
-    solicitudes = execute_db(
-        conn,
-        'SELECT id, nombre, tipo, estado FROM tramites_solicitudes ORDER BY id DESC'
-    ).fetchall()
-    conn.close()
-    return render_template("tramites.html", form=form, solicitudes=solicitudes)
-
-
-@app.route('/tramites/solicitar', methods=['POST'])
-def solicitar_tramite():
-    form = TramiteForm()
-    if form.validate_on_submit():
-        conn = get_db_connection()
-        execute_db(
-            conn,
-            'INSERT INTO tramites_solicitudes (nombre, email, tipo, detalle) VALUES (?, ?, ?, ?)',
-            (form.nombre.data, form.email.data, form.tipo.data, form.detalle.data),
-        )
-        conn.commit()
-        conn.close()
-        flash('Solicitud de trámite enviada correctamente.', 'success')
-    return redirect(url_for('tramites'))
-
-
-@app.route('/servicios')
-def servicios():
-    servicios_list = [
-        {"nombre": "Agua Potable", "descripcion": "Distribución y mantenimiento del servicio.", "stock": 7},
-        {"nombre": "Recolección de Basura", "descripcion": "Servicio urbano para limpieza y residuos.", "stock": 0},
-        {"nombre": "Alumbrado Público", "descripcion": "Mantenimiento de luminarias y energía.", "stock": 4},
-    ]
-    return render_template("servicios.html", servicios_list=servicios_list)
-
-
-@app.route('/turismo')
-def turismo():
-    turismo_list = [
-        {"lugar": "Mirador del Río", "tipo": "Atractivo natural"},
-        {"lugar": "Parque Central", "tipo": "Sitio histórico"},
-    ]
-    return render_template("turismo.html", turismo_list=turismo_list)
-
-
-@app.route('/contactos')
-def contactos():
-    contacto = {
-        "correo": "arenillasbrilla@gmail.com",
-        "telefono": "+593 969280318",
-        "direccion": "Avda José Moncada, Arenillas, Ecuador",
-    }
-    return render_template("contactos.html", contacto=contacto)
-
-
-@app.route('/clientes', methods=['GET'])
-def clientes():
-    return render_template('clientes.html', clientes=clientes_db)
-
-
-@app.route('/clientes/nuevo', methods=['GET', 'POST'])
-def nuevo_cliente():
-    form = ClienteForm()
-    if form.validate_on_submit():
-        cliente = {
-            'id': len(clientes_db) + 1,
-            'nombre': form.nombre.data,
-            'email': form.email.data,
-            'telefono': form.telefono.data,
-            'cedula': form.cedula.data,
-        }
-        clientes_db.append(cliente)
-        flash('Cliente registrado correctamente.', 'success')
-        return redirect(url_for('clientes'))
-    return render_template('clientes_form.html', form=form, titulo='Registrar cliente', accion='Registrar')
-
-
-@app.route('/clientes/<int:cliente_id>/editar', methods=['GET', 'POST'])
-def editar_cliente(cliente_id):
-    cliente = next((item for item in clientes_db if item['id'] == cliente_id), None)
-    if cliente is None:
-        flash('Cliente no encontrado.', 'danger')
-        return redirect(url_for('clientes'))
-
-    form = ClienteForm(obj=cliente)
-    if form.validate_on_submit():
-        cliente['nombre'] = form.nombre.data
-        cliente['email'] = form.email.data
-        cliente['telefono'] = form.telefono.data
-        cliente['cedula'] = form.cedula.data
-        flash('Cliente actualizado correctamente.', 'success')
-        return redirect(url_for('clientes'))
-    return render_template('clientes_form.html', form=form, titulo='Editar cliente', accion='Actualizar')
-
-
-@app.route('/proveedores', methods=['GET'])
-def proveedores():
-    return render_template('proveedores.html', proveedores=proveedores_db)
-
-
-@app.route('/proveedores/nuevo', methods=['GET', 'POST'])
-def nuevo_proveedor():
-    form = ProveedorForm()
-    if form.validate_on_submit():
-        proveedor = {
-            'id': len(proveedores_db) + 1,
-            'nombre': form.nombre.data,
-            'contacto': form.contacto.data,
-            'email': form.email.data,
-            'telefono': form.telefono.data,
-        }
-        proveedores_db.append(proveedor)
-        flash('Proveedor registrado correctamente.', 'success')
-        return redirect(url_for('proveedores'))
-    return render_template('proveedores_form.html', form=form, titulo='Registrar usuario', accion='Registrar')
-
-
-@app.route('/proveedores/<int:proveedor_id>/editar', methods=['GET', 'POST'])
-def editar_proveedor(proveedor_id):
-    proveedor = next((item for item in proveedores_db if item['id'] == proveedor_id), None)
-    if proveedor is None:
-        flash('Proveedor no encontrado.', 'danger')
-        return redirect(url_for('proveedores'))
-
-    form = ProveedorForm(obj=proveedor)
-    if form.validate_on_submit():
-        proveedor['nombre'] = form.nombre.data
-        proveedor['contacto'] = form.contacto.data
-        proveedor['email'] = form.email.data
-        proveedor['telefono'] = form.telefono.data
-        flash('Proveedor actualizado correctamente.', 'success')
-        return redirect(url_for('proveedores'))
-    return render_template('proveedores_form.html', form=form, titulo='Editar usuario', accion='Actualizar')
-
-
-@app.route('/facturacion', methods=['GET'])
-def facturacion():
-    return render_template('facturacion.html', facturas=facturas_db)
-
-
-@app.route('/facturacion/nuevo', methods=['GET', 'POST'])
-def nueva_factura():
-    form = FacturaForm()
-    if form.validate_on_submit():
-        factura = {
-            'id': len(facturas_db) + 1,
-            'cliente': form.cliente.data,
-            'subtotal': form.subtotal.data,
-            'iva': form.iva.data,
-            'total': form.total.data,
-            'estado': form.estado.data,
-        }
-        facturas_db.append(factura)
-        flash('Factura registrada correctamente.', 'success')
-        return redirect(url_for('facturacion'))
-    return render_template('facturacion_form.html', form=form, titulo='Registrar factura', accion='Registrar')
-
-
-@app.route('/facturacion/<int:factura_id>/editar', methods=['GET', 'POST'])
-def editar_factura(factura_id):
-    factura = next((item for item in facturas_db if item['id'] == factura_id), None)
-    if factura is None:
-        flash('Factura no encontrada.', 'danger')
-        return redirect(url_for('facturacion'))
-
-    form = FacturaForm(obj=factura)
-    if form.validate_on_submit():
-        factura['cliente'] = form.cliente.data
-        factura['subtotal'] = form.subtotal.data
-        factura['iva'] = form.iva.data
-        factura['total'] = form.total.data
-        factura['estado'] = form.estado.data
-        flash('Factura actualizada correctamente.', 'success')
-        return redirect(url_for('facturacion'))
-    return render_template('facturacion_form.html', form=form, titulo='Editar factura', accion='Actualizar')
-
+    flash('Obra eliminada del sistema.', 'warning')
+    return redirect(url_for('listar_obras'))
 
 if __name__ == '__main__':
     app.run(debug=True)
